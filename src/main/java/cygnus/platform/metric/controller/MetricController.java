@@ -1,5 +1,6 @@
 package cygnus.platform.metric.controller;
 
+import cygnus.platform.metric.exception.DuplicateResourceException;
 import cygnus.platform.metric.exception.InvalidRequestException;
 import cygnus.platform.metric.exception.ResourceNotFoundException;
 import cygnus.platform.metric.model.Metric;
@@ -78,6 +79,12 @@ public class MetricController {
     public void handleResourceNotFound(final HttpServletResponse response, final RuntimeException e)
             throws IOException {
         response.sendError(HttpStatus.NOT_FOUND.value(), e.getMessage());
+    }
+
+    @ExceptionHandler(DuplicateResourceException.class)
+    public void handleDuplicateResource(final HttpServletResponse response, final RuntimeException e)
+            throws IOException {
+        response.sendError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
     }
 
     @ExceptionHandler(InvalidRequestException.class)
