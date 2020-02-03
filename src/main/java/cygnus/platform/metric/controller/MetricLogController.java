@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URI;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
@@ -45,7 +47,7 @@ public class MetricLogController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public MetricLogResponse createMetricLog(
+    public ResponseEntity<MetricLogResponse> createMetricLog(
             @PathVariable("metricId") final String metricId,
             @RequestBody final MetricLogRequest metricLogRequest
     ) {
@@ -62,7 +64,8 @@ public class MetricLogController {
 
         final MetricLog metricLogResponse = metricLogService.createMetricLog(metricLog, metricId);
 
-        return new MetricLogResponse(metricLogResponse);
+        return ResponseEntity.created(URI.create(String.valueOf(metricLogResponse.getId())))
+                .body(new MetricLogResponse(metricLogResponse));
     }
 
     @RequestMapping(method = RequestMethod.GET)

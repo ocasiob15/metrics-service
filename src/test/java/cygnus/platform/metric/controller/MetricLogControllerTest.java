@@ -45,7 +45,7 @@ public class MetricLogControllerTest {
         final MetricLogRequest metricLogRequest = new MetricLogRequest(METRIC_ID, BigDecimal.ZERO);
         when(metricLogService.createMetricLog(any(), any())).thenReturn(createMetricLog());
 
-        final MetricLogResponse response = metricLogController.createMetricLog(METRIC_ID, metricLogRequest);
+        final MetricLogResponse response = metricLogController.createMetricLog(METRIC_ID, metricLogRequest).getBody();
         verify(metricService).validateMetricExistById(METRIC_ID);
         Assert.assertEquals(METRIC_ID, response.getMetricId());
         Assert.assertEquals(TIMESTAMP, response.getTimestamp());

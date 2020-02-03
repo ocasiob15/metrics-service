@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URI;
 
 @RestController
 @RequestMapping(path = "/metrics")
@@ -46,12 +48,13 @@ public class MetricController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Metric createMetric(
+    public ResponseEntity<Metric> createMetric(
             @RequestBody final Metric metricRequest
     ) {
         RequestValidator.validateMetricRequest(metricRequest);
         LOG.info(String.format("Creating new metric %s", metricRequest.getId()));
-        return metricService.createMetric(metricRequest);
+        final Metric response = metricService.createMetric(metricRequest);
+        return ResponseEntity.created(URI.create(response.getId())).body(response);
     }
 
     @RequestMapping(path = "/{metricId}", method = RequestMethod.PUT)

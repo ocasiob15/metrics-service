@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.http.ResponseEntity;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -42,7 +43,7 @@ public class MetricControllerTest {
     public void testCreateMetric() {
         final Metric metricRequest = createMetric();
         when(metricService.createMetric(metricRequest)).thenReturn(metricRequest);
-        final Metric metric = metricController.createMetric(metricRequest);
+        final Metric metric = metricController.createMetric(metricRequest).getBody();
         Assert.assertEquals(METRIC_ID, metric.getId());
         Assert.assertEquals(DESCRIPTION, metric.getDescription());
     }
