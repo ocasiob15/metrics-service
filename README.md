@@ -11,7 +11,7 @@ Simple API that can collect data for metrics
 1. Run the 'build' bash script located in the project root
 
 2. Manually 
-  a. Run 'mvn clean package'
+  a. Run 'mvn clean package' or 'mvn clean install'
   b. Run 'docker build -t metrics-service .'
   c. Run 'docker run -p 8080:8080 metrics-service'
 
