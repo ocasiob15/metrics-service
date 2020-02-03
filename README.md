@@ -18,3 +18,7 @@ Simple API that can collect data for metrics
 3. Load project on IntelliJ and run as a springboot profile using the default profile
 
 4. Run your classic maven command 'mvn spring-boot:run'
+
+Apiary documents as well as run time found here
+
+https://metricsservice3.docs.apiary.io/#
