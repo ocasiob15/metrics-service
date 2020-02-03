@@ -1,0 +1,117 @@
+databaseChangeLog:
+  - property:
+      name: timestampWithoutTimeZone.type
+      value: 'TIMESTAMP(6) WITHOUT TIME ZONE'
+      dbms: mysql,h2
+  - property:
+      name: varchar255.type
+      value: 'VARCHAR(255)'
+      dbms: mysql,h2
+  - property:
+      name: text.type
+      value: 'text'
+      dbms: mysql,h2
+  - changeSet:
+      author: 'Brian Ocasio'
+      id: C1
+      changes:
+        - createTable:
+            tableName: metric
+            columns:
+              - column:
+                  name: id
+                  type: ${varchar255.type}
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: description
+                  type: ${text.type}
+  - changeSet:
+      author: 'Brian Ocasio'
+      id: C2
+      changes:
+        - createTable:
+            tableName: metric_logs
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: metric_id
+                  type: ${varchar255.type}
+              - column:
+                  name: value
+                  type: numeric(10, 2)
+              - column:
+                  name: timestamp
+                  type: ${timestampWithoutTimeZone.type}
+  - changeSet:
+      author: 'Brian Ocasio'
+      id: C3
+      changes:
+        - createTable:
+            tableName: metric_statistics
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: metric_id
+                  type: ${varchar255.type}
+              - column:
+                  name: mean
+                  type: numeric(10, 2)
+              - column:
+                  name: median
+                  type: numeric(10, 2)
+              - column:
+                  name: min_value
+                  type: numeric(10, 2)
+              - column:
+                  name: max_value
+                  type: numeric(10, 2)
+  - changeSet:
+      author: 'Brian Ocasio'
+      id: C4
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: metric_id
+            baseTableName: metric_logs
+            constraintName: fk_metric_log_id
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: CASCADE
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: metric
+        - addForeignKeyConstraint:
+            baseColumnNames: metric_id
+            baseTableName: metric_statistics
+            constraintName: fk_metric_statistics_id
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: CASCADE
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: metric
+        - createIndex:
+            columns:
+              - column:
+                  name: metric_id
+            indexName: metric_id_statistics_index
+            tableName: metric_statistics
+        - createIndex:
+            columns:
+              - column:
+                  name: metric_id
+            indexName: metric_id_logs_index
+            tableName: metric_logs
