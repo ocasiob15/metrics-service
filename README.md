@@ -2,10 +2,9 @@
 Simple API that can collect data for metrics
 
 
-# Running project
-
-## Must have maven installed
-## Must have Docker installed
+## Running project (Requirements)
+  Must have maven installed
+  Must have Docker installed
 
 ## Options for running this project
 
